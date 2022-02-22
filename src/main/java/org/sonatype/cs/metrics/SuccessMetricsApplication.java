@@ -17,13 +17,12 @@ import java.time.format.DateTimeFormatter;
 
 @SpringBootApplication
 public class SuccessMetricsApplication implements CommandLineRunner {
-
     private static final Logger log = LoggerFactory.getLogger(SuccessMetricsApplication.class);
 
     public static boolean successMetricsFileLoaded = false;
 
     private String timestamp;
-    //
+
     @Value("${spring.main.web-application-type}")
     private String runMode;
 
@@ -32,12 +31,6 @@ public class SuccessMetricsApplication implements CommandLineRunner {
 
     @Value("${pdf.htmltemplate}")
     private String pdfTemplate;
-
-    @Value("${iq.sm.csvfile}")
-    private boolean iqSmCsvfile;
-
-    @Value("${iq.sm.period}")
-    private String iqSmPeriod;
 
     @Value("${server.port}")
     private String port;
@@ -66,15 +59,10 @@ public class SuccessMetricsApplication implements CommandLineRunner {
         log.info("Working directory: " + System.getProperty("user.dir"));
         log.info("Active profile: " + activeProfile);
 
-        if (iqSmCsvfile) {
-            loaderService.createSmDatafile(iqSmPeriod);
-        }
-
-        successMetricsFileLoaded = loaderService.loadSuccessMetricsData();
+        successMetricsFileLoaded = loaderService.loadAllMetrics();
 
         if (runMode.contains("SERVLET")) {
             // web app
-            loaderService.loadReports2();
             this.startUp();
         } else {
             // non-interactive mode

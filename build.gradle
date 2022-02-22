@@ -17,6 +17,7 @@ sourceCompatibility = '8'
 def applicationname = 'nexusiq-successmetrics'
 def packagedir = "successmetrics-${version}"
 def releasedir = "${packagedir}/${packagedir}"
+def configdir = "${packagedir}/${packagedir}/config"
 
 repositories {
 	mavenCentral()
@@ -59,21 +60,6 @@ nexusIQScan {
   allConfigurations = true
 }
 
-test {
-	useJUnitPlatform()
-    finalizedBy jacocoTestReport // report is always generated after tests run
-	testLogging {
-		events "passed", "skipped", "failed"
-	}
-}
-
-jacocoTestReport {
-	reports{
-		xml.enabled true
-        csv.enabled true
-	}
-    dependsOn test // tests are required to run before generating the report
-}
 
 clean.doFirst {
 	delete "${packagedir}"
@@ -96,12 +82,14 @@ task packagejar (type: Copy) {
   into "${releasedir}"
 }
 
+task copyconfig (type: Copy) {
+	from 'src/main/resources'
+	include "application.properties"
+	into "${configdir}"
+}
+
 task packagefiles (type: Copy) {
 	from 'releasefiles'
-	include '*.json'
-	include 'create*'
-	include 'reports2/'
-	include 'config/'
 	include 'runapp*'
 	into "${releasedir}"
 	filter(ReplaceTokens, tokens: [APPVER: project.version])
@@ -120,4 +108,5 @@ docker {
 
 packagejar.dependsOn bootJar
 packagefiles.dependsOn packagejar
-release.dependsOn packagefiles
+copyconfig.dependsOn packagefiles
+release.dependsOn copyconfig

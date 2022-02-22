@@ -156,7 +156,7 @@
     <div class="chart-container" style="margin-left: 100px; width:40vw">
         <div id="applicationEvaluationsChart" width="400" height="400"></div>
             <script>
-                var age90 = 3;
+c                var age90 = 3;
                 var age60 = 17;
                 var age30 = 0;
                 var age7 = 0;

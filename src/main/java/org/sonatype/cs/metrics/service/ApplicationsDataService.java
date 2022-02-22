@@ -18,11 +18,11 @@ import java.util.Map;
 public class ApplicationsDataService {
     @Autowired private DbService dbService;
 
-    @Value("${iq.api.payload.application.name}")
-    private String iqApiApplicationName;
-
-    @Value("${iq.api.payload.organisation.name}")
-    private String iqApiOrganisationName;
+//    @Value("${iq.api.payload.application.name}")
+//    private String iqApiApplicationName;
+//
+//    @Value("${iq.api.payload.organisation.name}")
+//    private String iqApiOrganisationName;
 
     public Map<String, Object> getApplicationData(String tableName, Map<String, Object> periodsData)
             throws ParseException {
@@ -72,16 +72,16 @@ public class ApplicationsDataService {
             model.put("applicationReport", false);
         }
 
-        PayloadItem organisationName = new PayloadItem(iqApiOrganisationName, false);
-        PayloadItem applicationName = new PayloadItem(iqApiApplicationName, false);
-
-        if (organisationName.isExists()) {
-            model.put("orgOrAppName", "Organisation: " + iqApiOrganisationName);
-        } else if (applicationName.isExists()) {
-            model.put("orgOrAppName", "Application: " + iqApiApplicationName);
-        } else {
-            model.put("orgOrAppName", "");
-        }
+//        PayloadItem organisationName = new PayloadItem(iqApiOrganisationName, false);
+//        PayloadItem applicationName = new PayloadItem(iqApiApplicationName, false);
+//
+//        if (organisationName.isExists()) {
+//            model.put("orgOrAppName", "Organisation: " + iqApiOrganisationName);
+//        } else if (applicationName.isExists()) {
+//            model.put("orgOrAppName", "Application: " + iqApiApplicationName);
+//        } else {
+//            model.put("orgOrAppName", "");
+//        }
 
         List<DbRow> numberOfScansData = dbService.runSql(tableName, SqlStatements.NumberOfScans);
         int[] numberOfScans = HelperService.getPointsSumAndAverage(numberOfScansData);
